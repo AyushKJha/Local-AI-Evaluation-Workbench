@@ -4,4 +4,4 @@ Syntax: passed. Persistent CRUD, repeated request deduplication and input reject
 
 ## Workflow review
 - [ ] Validated by developer users in test environment
-- [ ] No external dependencies beyond local models and SQLite storage
+- [ ] No external dependencies beyond local AI models

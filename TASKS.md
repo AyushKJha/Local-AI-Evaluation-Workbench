@@ -1,3 +1,3 @@
-- [ ] Import evaluation dataset via CSV/JSON
-- [ ] Run model comparisons against locally hosted agents
-- [ ] Generate comparison reports with metrics
+- [ ] Import evaluation dataset (CSV/JSON)
+- [ ] Run comparisons against locally hosted models
+- [ ] Generate quality and latency reports
