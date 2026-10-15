@@ -1,0 +1,3 @@
+- [ ] Import evaluation dataset via CSV/JSON
+- [ ] Run model comparisons against locally hosted agents
+- [ ] Generate comparison reports with metrics

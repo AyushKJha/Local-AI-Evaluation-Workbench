@@ -1,0 +1,111 @@
+{
+  "title": "Local AI Evaluation Workbench",
+  "description": "Manage evaluation dataset, model comparison, comparison report with persistent records, typed forms, search and CSV/JSON import.",
+  "entities": [
+    {
+      "name": "evaluation_dataset",
+      "label": "Evaluation Dataset",
+      "fields": [
+        {
+          "name": "dataset_name",
+          "label": "Dataset Name",
+          "type": "text",
+          "required": true,
+          "options": []
+        },
+        {
+          "name": "file_path",
+          "label": "File Path",
+          "type": "text",
+          "required": false,
+          "options": []
+        },
+        {
+          "name": "imported_at",
+          "label": "Imported At",
+          "type": "date",
+          "required": true,
+          "options": []
+        }
+      ]
+    },
+    {
+      "name": "model_comparison",
+      "label": "Model Comparison",
+      "fields": [
+        {
+          "name": "comparison_id",
+          "label": "Comparison ID",
+          "type": "text",
+          "required": true,
+          "options": []
+        },
+        {
+          "name": "model_name",
+          "label": "Model Name",
+          "type": "text",
+          "required": true,
+          "options": []
+        },
+        {
+          "name": "latency_ms",
+          "label": "Latency (ms)",
+          "type": "number",
+          "required": false,
+          "options": []
+        },
+        {
+          "name": "cost_per_call",
+          "label": "Cost per Call",
+          "type": "number",
+          "required": false,
+          "options": []
+        },
+        {
+          "name": "quality_score",
+          "label": "Quality Score",
+          "type": "number",
+          "required": true,
+          "options": []
+        }
+      ]
+    },
+    {
+      "name": "comparison_report",
+      "label": "Comparison Report",
+      "fields": [
+        {
+          "name": "report_id",
+          "label": "Report ID",
+          "type": "text",
+          "required": true,
+          "options": []
+        },
+        {
+          "name": "dataset_name",
+          "label": "Dataset Name",
+          "type": "text",
+          "required": false,
+          "options": []
+        },
+        {
+          "name": "model_comparison_ids",
+          "label": "Model Comparisons",
+          "type": "select",
+          "required": true,
+          "options": [
+            "comparison_id_1",
+            "comparison_id_2"
+          ]
+        },
+        {
+          "name": "report_date",
+          "label": "Report Date",
+          "type": "date",
+          "required": true,
+          "options": []
+        }
+      ]
+    }
+  ]
+}
