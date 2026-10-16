@@ -6,14 +6,21 @@ A small local workspace for organizing AI evaluation datasets, recording model c
 
 **Node.js 24+ · SQLite · Vanilla JavaScript**
 
-> **[Step-by-step user guide (PDF)](docs/USER_GUIDE.pdf)**
-
 ## What is implemented
 
 - Create, search, edit, and delete typed dataset, comparison, and report records.
 - Import records from CSV or JSON and export JSON.
 - Store application records in a local SQLite database.
 - Run the built-in acceptance checks with `npm test`.
+
+## Record an evaluation
+
+1. Start the local app and open the address below.
+2. In **Evaluation Dataset**, enter a dataset name and optionally a file path. The app records the reference; it does not open or run the dataset.
+3. In **Model Comparison**, enter a comparison ID and model name, then optionally add the latency in milliseconds you measured.
+4. In **Comparison Report**, save a report ID. Use search to find records and the form controls to edit or delete them; import CSV/JSON using the field names shown for the selected collection, or export that collection as JSON.
+
+The app organizes and stores evaluation records; it does not execute prompts or automatically measure model quality, latency, or cost. Keep the underlying `data/` directory to retain the local SQLite database.
 
 ## Run locally
 
