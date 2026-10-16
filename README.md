@@ -6,6 +6,8 @@ A small local workspace for organizing AI evaluation datasets, recording model c
 
 **Node.js 24+ · SQLite · Vanilla JavaScript**
 
+> **[Step-by-step user guide (PDF)](docs/USER_GUIDE.pdf)**
+
 ## What is implemented
 
 - Create, search, edit, and delete typed dataset, comparison, and report records.
