@@ -28,7 +28,7 @@ The app organizes and stores evaluation records; it does not execute prompts or 
 npm start
 ```
 
-Open [http://127.0.0.1:4320](http://127.0.0.1:4320).
+Once the server prints its listening address, open [http://127.0.0.1:4320](http://127.0.0.1:4320) on the same laptop. This link will not open if the server is stopped. To run another project simultaneously in PowerShell, use `$env:PORT=4321; node server.mjs` and open `http://127.0.0.1:4321`.
 
 No npm packages or build step are needed. The database is created at `data/app.sqlite`; back up that directory if you want to preserve records.
 
