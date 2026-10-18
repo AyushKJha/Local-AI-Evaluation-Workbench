@@ -1,43 +1,31 @@
 # Local AI Evaluation Workbench
 
-<img src="docs/banner.svg" alt="Local AI Evaluation Workbench — project illustration" width="100%">
+<img src="banner.svg" alt="Local AI Evaluation Workbench project illustration" width="100%">
 
-A small local workspace for organizing AI evaluation datasets, recording model comparisons, and keeping report records together.
+A private-by-default workspace for organizing evaluation datasets, recording model comparisons, and keeping report records together.
 
-**Node.js 24+ · SQLite · Vanilla JavaScript**
+## Public web app
 
-## What is implemented
+**Open the app:** https://ayushkjha.github.io/Local-AI-Evaluation-Workbench/
 
-- Create, search, edit, and delete typed dataset, comparison, and report records.
-- Import records from CSV or JSON and export JSON.
-- Store application records in a local SQLite database.
-- Run the built-in acceptance checks with `npm test`.
+The hosted app saves records in this browser on this device. Records are not sent to a server or synchronized across devices. Use **Export JSON** for backups or to move records.
 
-## Record an evaluation
+## Features
 
-1. Start the local app and open the address below.
-2. In **Evaluation Dataset**, enter a dataset name and optionally a file path. The app records the reference; it does not open or run the dataset.
-3. In **Model Comparison**, enter a comparison ID and model name, then optionally add the latency in milliseconds you measured.
-4. In **Comparison Report**, save a report ID. Use search to find records and the form controls to edit or delete them; import CSV/JSON using the field names shown for the selected collection, or export that collection as JSON.
+- Create, search, edit, and delete dataset, comparison, and report records.
+- Import CSV or JSON and export JSON backups.
 
-The app organizes and stores evaluation records; it does not execute prompts or automatically measure model quality, latency, or cost. Keep the underlying `data/` directory to retain the local SQLite database.
+## Limits
 
-## Run locally
+It stores measurements you enter; it does not execute models or automatically measure quality, latency, or cost. Dataset paths are references only.
+
+## Run the private local version
+
+Requires Node.js 24 or newer. From this repository, run:
 
 ```sh
-npm start
+npm test
+node server.mjs
 ```
 
-Once the server prints its listening address, open [http://127.0.0.1:4320](http://127.0.0.1:4320) on the same laptop. This link will not open if the server is stopped. To run another project simultaneously in PowerShell, use `$env:PORT=4321; node server.mjs` and open `http://127.0.0.1:4321`.
-
-No npm packages or build step are needed. The database is created at `data/app.sqlite`; back up that directory if you want to preserve records.
-
-## Current scope
-
-This repository currently manages evaluation records. It does **not** run prompts against local models or automatically measure quality, latency, or cost yet. The repository does not include a public deployment. The app is designed for one local owner.
-
-To expose the server on a network, configure `HOST=0.0.0.0`, set a strong `APP_PASSWORD` (at least 16 characters), use HTTPS, and provide durable storage for SQLite.
-
-## Built with
-
-Node.js built-in HTTP server and SQLite, with a browser interface in `workspace.html`, `workspace.css`, and `workspace.js`.
+The local Node.js version stores records in SQLite under `data/`. The public browser version does not access this database.
