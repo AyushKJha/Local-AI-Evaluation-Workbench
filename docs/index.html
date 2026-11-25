@@ -1,1 +1,117 @@
-<!doctype html><html lang="en" data-theme="eclipse"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Local AI Evaluation Workbench</title><link rel="stylesheet" href="workspace.css"><script type="module" src="workspace.js"></script></head><body data-storage="browser"><main><header><span class="eyebrow">YOUR APPLICATION / PERSISTENT WORKSPACE</span><h1 id="title">Connecting…</h1><p id="description"></p><nav id="collections" aria-label="Collections"></nav><p id="notice" role="status" aria-live="polite"></p></header><div class="layout"><section><form id="editor"><h2 id="editorTitle">Add a record</h2><div id="fields"></div><div class="actions"><button id="save" type="submit">Save record</button><button id="reset" type="button">Clear form</button></div></form><details class="import-panel"><summary>Import records</summary><label for="importData">Paste a JSON array or CSV with the field names shown below</label><p id="importHelp"></p><textarea id="importData" rows="5" maxlength="60000"></textarea><button id="importRecords" type="button">Import into this collection</button></details></section><section><div class="toolbar"><label>Search records<input id="search" type="search" placeholder="Search any field"></label><button id="export" type="button">Export JSON</button></div><p id="count"></p><div id="records"></div></section></div><footer>Data stays in this browser on this device. Export JSON to back up or move your records.</footer></main></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Local AI Evaluation Workbench</title>
+<meta name="description" content="Test local Ollama models against your own prompts and checks, then compare pass rate, latency and speed side by side.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self' http://localhost:* http://127.0.0.1:*; base-uri 'none'; form-action 'none'">
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="bench.css">
+<script type="module" src="app.js"></script>
+</head>
+<body>
+<main>
+  <header class="top">
+    <div>
+      <h1>Local AI Evaluation Workbench</h1>
+      <p class="muted">Run your own test prompts against models on your computer and see which one is right for the job. Nothing leaves your machine.</p>
+    </div>
+    <div class="top-actions">
+      <button id="exportAll" type="button">Export</button>
+      <button id="importAllBtn" type="button">Import</button>
+      <input id="importAll" type="file" accept=".json,application/json" hidden>
+    </div>
+  </header>
+
+  <section class="card" aria-labelledby="connTitle">
+    <h2 id="connTitle">1. Connect to Ollama</h2>
+    <form id="connForm" class="conn">
+      <label>Ollama address<input name="url" value="http://localhost:11434" required></label>
+      <button class="primary" type="submit">Connect</button>
+      <span id="connStatus" class="badge none">Not connected</span>
+    </form>
+    <details id="setupHelp">
+      <summary class="small">Connection not working?</summary>
+      <ol class="small">
+        <li>Install <a href="https://ollama.com/download" rel="noopener" target="_blank">Ollama</a> and pull a model, for example <code>ollama pull llama3.2:3b</code>.</li>
+        <li>Allow this page to reach it. Quit Ollama, then start it with this page's address allowed:<br><code id="originCmd"></code></li>
+        <li>If the browser asks to let this site access devices on your local network, choose Allow.</li>
+      </ol>
+    </details>
+    <div id="models" class="model-list"></div>
+  </section>
+
+  <div class="grid">
+    <section class="card" aria-labelledby="caseTitle">
+      <h2 id="caseTitle">2. Test cases</h2>
+      <form id="caseForm">
+        <input type="hidden" name="id">
+        <label>Name<input name="name" required maxlength="120" placeholder="Extract invoice total"></label>
+        <label>Prompt<textarea name="prompt" required placeholder="Return only the total from: Subtotal 40, tax 4, total 44."></textarea></label>
+        <details>
+          <summary class="small">System prompt (optional)</summary>
+          <label class="small">System prompt<textarea name="system"></textarea></label>
+        </details>
+        <h3>Checks</h3>
+        <div id="checkRows"></div>
+        <button type="button" id="addCheck" class="link">+ Add check</button>
+        <div class="top-actions spaced">
+          <button class="primary" type="submit" id="saveCase">Add case</button>
+          <button type="button" id="clearCase">Clear</button>
+        </div>
+      </form>
+      <details class="spaced">
+        <summary class="small">Import cases from CSV or JSON</summary>
+        <p class="small muted">CSV columns: <code>name,prompt,type,value</code>, one row per check. Check types: contains, not_contains, regex, equals, json, max_words, min_words.</p>
+        <textarea id="importCases" placeholder="name,prompt,type,value"></textarea>
+        <button type="button" id="importCasesBtn">Import</button>
+      </details>
+    </section>
+
+    <section>
+      <div class="card">
+        <div class="split">
+          <h2>Suite</h2>
+          <button type="button" id="starter">Load starter suite</button>
+        </div>
+        <div id="cases" class="list"></div>
+      </div>
+      <div class="card">
+        <div class="split">
+          <h2>3. Run</h2>
+          <div class="top-actions">
+            <button type="button" id="cancel" hidden>Cancel</button>
+            <button type="button" class="primary" id="run">Run evaluation</button>
+          </div>
+        </div>
+        <label class="inline small">Temperature <input id="temperature" type="number" min="0" max="2" step="0.1" value="0" class="narrow"></label>
+        <progress id="progress" value="0" max="1" hidden></progress>
+        <p id="runStatus" class="small muted"></p>
+      </div>
+    </section>
+  </div>
+
+  <section class="card" id="resultsCard" hidden>
+    <div class="split">
+      <h2 id="resultsTitle">Results</h2>
+      <div class="top-actions">
+        <select id="history" aria-label="Past runs"></select>
+        <button type="button" id="exportCsv">Export CSV</button>
+      </div>
+    </div>
+    <div class="table-wrap"><table id="leaderboard"></table></div>
+    <h3 class="spaced">By case</h3>
+    <div class="table-wrap"><table id="matrix"></table></div>
+  </section>
+
+  <dialog id="outputDialog">
+    <div class="split"><h2 id="outTitle"></h2><button type="button" id="closeOut" aria-label="Close">✕</button></div>
+    <ul id="outChecks" class="checks"></ul>
+    <pre id="outText"></pre>
+  </dialog>
+  <footer id="footer">Test cases and results are saved in this browser only. Use Export to back them up.</footer>
+</main>
+<div id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
