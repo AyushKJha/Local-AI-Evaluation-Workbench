@@ -1,3 +1,0 @@
-- [ ] Import evaluation dataset (CSV/JSON)
-- [ ] Run comparisons against locally hosted models
-- [ ] Generate quality and latency reports
